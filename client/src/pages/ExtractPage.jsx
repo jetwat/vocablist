@@ -57,7 +57,9 @@ const ExtractPage = () => {
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
 
-      setWords(data.data.words);
+      const alreadySkipped = data.data.skipped ?? [];
+      setWords([...data.data.words, ...alreadySkipped]);
+      setSkipped(new Set(alreadySkipped));
     } catch (err) {
       setError(err.message);
     } finally {

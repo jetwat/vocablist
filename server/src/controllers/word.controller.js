@@ -16,21 +16,22 @@ export const extract = asyncHandler(async (req, res) => {
 
   let words = extractWords(text);
 
+  let skippedInText = [];
+
   if (req.user) {
     const [savedWords, skippedWords] = await Promise.all([
       Word.find({ userId: req.user._id }).select("word").lean(),
       SkippedWord.find({ userId: req.user._id }).select("word").lean(),
     ]);
 
-    const exclude = new Set([
-      ...savedWords.map((w) => w.word),
-      ...skippedWords.map((w) => w.word),
-    ]);
+    const savedSet = new Set(savedWords.map((w) => w.word));
+    const skippedSet = new Set(skippedWords.map((w) => w.word));
 
-    words = words.filter((w) => !exclude.has(w.toLowerCase()));
+    skippedInText = words.filter((w) => skippedSet.has(w.toLowerCase()));
+    words = words.filter((w) => !savedSet.has(w.toLowerCase()) && !skippedSet.has(w.toLowerCase()));
   }
 
-  res.status(200).json({ success: true, data: { words } });
+  res.status(200).json({ success: true, data: { words, skipped: skippedInText } });
 });
 
 // POST /api/v1/words  (ต้อง login)
