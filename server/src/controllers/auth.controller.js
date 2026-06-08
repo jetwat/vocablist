@@ -16,10 +16,10 @@ const generateToken = (res, userId) => {
   });
 
   res.cookie("token", token, {
-    httpOnly: true, // JS อ่านไม่ได้ → กันXSS
-    secure: process.env.NODE_ENV === "production", // HTTPS only ใน prod
-    sameSite: "strict", // กัน CSRF
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 วัน (ms)
+    httpOnly: true,
+    secure: true,
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 };
 
@@ -79,6 +79,8 @@ export const logout = asyncHandler(async (req, res) => {
   // clear cookie โดยส่ง cookie ว่างที่หมดอายุทันที
   res.cookie("token", "", {
     httpOnly: true,
+    secure: true,
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     expires: new Date(0),
   });
 
