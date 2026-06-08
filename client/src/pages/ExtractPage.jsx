@@ -10,6 +10,7 @@
 import { useState, useEffect } from "react";
 import WordList from "../components/WordList.jsx";
 import useAuth from "../hooks/useAuth.js";
+import API from "../api.js";
 
 
 const ExtractPage = () => {
@@ -47,7 +48,7 @@ const ExtractPage = () => {
     // ไม่ reset skipped — ให้ใช้ค่าจาก localStorage ต่อเนื่อง
 
     try {
-      const res = await fetch("/api/v1/words/extract", {
+      const res = await fetch(`${API}/api/v1/words/extract`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -68,7 +69,7 @@ const ExtractPage = () => {
     setSaved((prev) => new Set([...prev, word]));
 
     try {
-      const res = await fetch("/api/v1/words", {
+      const res = await fetch(`${API}/api/v1/words`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -92,7 +93,7 @@ const ExtractPage = () => {
   const handleSkip = async (word) => {
     setSkipped((prev) => new Set([...prev, word]));
     try {
-      await fetch("/api/v1/words/skipped", {
+      await fetch(`${API}/api/v1/words/skipped`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -114,7 +115,7 @@ const ExtractPage = () => {
       return next;
     });
     try {
-      await fetch(`/api/v1/words/skipped/${encodeURIComponent(word)}`, {
+      await fetch(`${API}/api/v1/words/skipped/${encodeURIComponent(word)}`, {
         method: "DELETE",
         credentials: "include",
       });

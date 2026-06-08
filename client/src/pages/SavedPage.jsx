@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import WordList from "../components/WordList.jsx";
+import API from "../api.js";
 
 const SavedPage = () => {
   const [words, setWords] = useState([]);
@@ -11,7 +12,7 @@ const SavedPage = () => {
   useEffect(() => {
     const fetchWords = async () => {
       try {
-        const res = await fetch("/api/v1/words", {
+        const res = await fetch(`${API}/api/v1/words`, {
           credentials: "include",
         });
         const data = await res.json();
@@ -32,7 +33,7 @@ const SavedPage = () => {
     setWords((prev) => prev.filter((w) => w._id !== wordObj._id));
 
     try {
-      const res = await fetch(`/api/v1/words/${wordObj._id}`, {
+      const res = await fetch(`${API}/api/v1/words/${wordObj._id}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -46,7 +47,7 @@ const SavedPage = () => {
   };
 
   const handleExport = async () => {
-    const res = await fetch("/api/v1/words/export", {
+    const res = await fetch(`${API}/api/v1/words/export`, {
       credentials: "include",
     });
     // server ส่ง Content-Disposition: attachment → browser download อัตโนมัติ
