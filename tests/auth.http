@@ -1,0 +1,31 @@
+### auth.http
+### VS Code REST Client extension ใช้ไฟล์นี้ทดสอบ API โดยไม่ต้องเปิด Postman
+
+@base = http://localhost:5000/api/v1
+
+### Register
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+###
+
+### Login
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+###
+
+### Logout
+POST {{base}}/auth/logout
+
+###

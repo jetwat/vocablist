@@ -1,0 +1,41 @@
+### word.http
+
+@base = http://localhost:5000/api/v1
+
+### Extract words (public — ไม่ต้อง login)
+POST {{base}}/words/extract
+Content-Type: application/json
+
+{
+  "text": "The quick brown fox jumps over the lazy dog. The fox was very quick and clever."
+}
+
+###
+
+### Save words (ต้อง login ก่อน — cookie จะถูกส่งอัตโนมัติถ้าใช้ REST Client)
+POST {{base}}/words
+Content-Type: application/json
+
+{
+  "words": [
+    { "word": "quick", "source": "The quick brown fox" },
+    { "word": "clever", "source": "The fox was very quick and clever." }
+  ]
+}
+
+###
+
+### Get saved words
+GET {{base}}/words
+
+###
+
+### Export words as .txt
+GET {{base}}/words/export
+
+###
+
+### Delete a word (แทน :id ด้วย _id จริงจาก GET response)
+DELETE {{base}}/words/REPLACE_WITH_WORD_ID
+
+###
